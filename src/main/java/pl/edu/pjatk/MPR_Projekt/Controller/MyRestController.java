@@ -1,10 +1,7 @@
 package pl.edu.pjatk.MPR_Projekt.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.edu.pjatk.MPR_Projekt.Model.Cat;
 import pl.edu.pjatk.MPR_Projekt.Services.CatService;
 
@@ -28,5 +25,15 @@ public class MyRestController {
     @PostMapping("cat")
     public void create(@RequestBody Cat cat) {
         this.catService.createCat(cat);
+    }
+
+    @DeleteMapping("cat/{name}")
+    public void delete(@PathVariable String name){
+        this.catService.deleteCat(name);
+    }
+
+    @PutMapping("cat/{id}")
+    public void update(@PathVariable int id, @RequestBody Cat cat){
+        this.catService.updateCat(id, cat);
     }
 }

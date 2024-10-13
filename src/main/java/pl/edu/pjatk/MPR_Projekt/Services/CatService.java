@@ -24,5 +24,24 @@ public class CatService {
         this.catList.add(cat);
     }
 
+    public Cat getCatById(int id) {
+        if (id >= 0 && id < catList.size()) {
+            return catList.get(id);
+        }
+        return null;
+    }
+
+    public void deleteCat(String name) {
+        this.catList.removeIf(cat -> cat.getName().equals(name));
+    }
+
+    public void updateCat(int id, Cat updatedCat) {
+        Cat cat = getCatById(id);
+        if (cat != null) {
+            cat.setName(updatedCat.getName());
+            cat.setAge(updatedCat.getAge());
+        }
+    }
+
 }
 
