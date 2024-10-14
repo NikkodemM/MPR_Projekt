@@ -1,19 +1,30 @@
 package pl.edu.pjatk.MPR_Projekt.Services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.edu.pjatk.MPR_Projekt.Model.Cat;
+import pl.edu.pjatk.MPR_Projekt.Repository.CatRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CatService {
+    private CatRepository catRepository;
     List<Cat> catList = new ArrayList<>();
 
-    public CatService() {
-        catList.add(new Cat("Frank",2));
-        catList.add(new Cat("Leon",3));
-        catList.add(new Cat("Michael",4));
+    @Autowired
+    public CatService(CatRepository repository) {
+        this.catRepository = repository;
+
+        catRepository.save(new Cat("Frank", 2));
+        catRepository.save(new Cat("Leon", 3));
+        catRepository.save(new Cat("Michael", 4));
+    }
+
+    public List<Cat> getCatByName(String name) {
+        return this.catRepository.findByName(name);
     }
 
     public List<Cat> getCatList() {
@@ -24,24 +35,23 @@ public class CatService {
         this.catList.add(cat);
     }
 
-    public Cat getCatById(int id) {
-        if (id >= 0 && id < catList.size()) {
-            return catList.get(id);
-        }
-        return null;
+    public Optional<Cat> getCatById(Long id) {
+        return this.catRepository.findById(id);
     }
 
     public void deleteCat(String name) {
         this.catList.removeIf(cat -> cat.getName().equals(name));
     }
 
-    public void updateCat(int id, Cat updatedCat) {
-        Cat cat = getCatById(id);
-        if (cat != null) {
-            cat.setName(updatedCat.getName());
-            cat.setAge(updatedCat.getAge());
+    public void updateCat(Long id, Cat updatedCat) {
+        Optional<Cat> cat = getCatById(id);
+        if (cat.isPresent()) {
+            cat.get().setName(updatedCat.getName());
+            cat.get().setAge(updatedCat.getAge());
         }
     }
 
+    public Optional<Cat> get(Long id) {
+        return this.catRepository.findById(id);
+    }
 }
-

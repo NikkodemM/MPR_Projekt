@@ -6,6 +6,7 @@ import pl.edu.pjatk.MPR_Projekt.Model.Cat;
 import pl.edu.pjatk.MPR_Projekt.Services.CatService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class MyRestController {
@@ -16,10 +17,14 @@ public class MyRestController {
         this.catService = catService;
     }
 
-    @GetMapping("cat/all")
-    public List<Cat> getAll() {
+    @GetMapping("cat/{id}/identifier")
+    public long getIdentifier(@PathVariable Long id) {
+        Optional<Cat> cat = this.catService.get(id);
+        return cat.map(Cat::getIdentifier).orElseThrow(() -> new RuntimeException("Cat nie odnaleziony ;("));
+    }
 
-        return this.catService.getCatList();
+    public Optional<Cat> get(@PathVariable Long id) {
+        return this.catService.get(id);
     }
 
     @PostMapping("cat")
@@ -33,7 +38,7 @@ public class MyRestController {
     }
 
     @PutMapping("cat/{id}")
-    public void update(@PathVariable int id, @RequestBody Cat cat){
+    public void update(@PathVariable Long id, @RequestBody Cat cat){
         this.catService.updateCat(id, cat);
     }
 }
