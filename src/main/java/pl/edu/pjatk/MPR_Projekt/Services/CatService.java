@@ -18,9 +18,9 @@ public class CatService {
     public CatService(CatRepository repository) {
         this.catRepository = repository;
 
-        catRepository.save(new Cat("Frank", 2));
-        catRepository.save(new Cat("Leon", 3));
-        catRepository.save(new Cat("Michael", 4));
+        catRepository.save(new Cat("Frank", 2, 1L));
+        catRepository.save(new Cat("Leon", 3,2L));
+        catRepository.save(new Cat("Michael", 4, 3L));
     }
 
     public List<Cat> getCatByName(String name) {
@@ -28,26 +28,30 @@ public class CatService {
     }
 
     public List<Cat> getCatList() {
-        return this.catList;
+        return (List<Cat>) catRepository.findAll();
     }
 
     public void createCat(Cat cat) {
-        this.catList.add(cat);
+        catRepository.save(cat);
     }
 
     public Optional<Cat> getCatById(Long id) {
         return this.catRepository.findById(id);
     }
 
-    public void deleteCat(String name) {
-        this.catList.removeIf(cat -> cat.getName().equals(name));
+    public void deleteCat(Long id) {
+        catRepository.deleteById(id);
     }
 
     public void updateCat(Long id, Cat updatedCat) {
         Optional<Cat> cat = getCatById(id);
         if (cat.isPresent()) {
-            cat.get().setName(updatedCat.getName());
-            cat.get().setAge(updatedCat.getAge());
+            Cat existingCat = cat.get();
+            existingCat.setName(updatedCat.getName());
+            existingCat.setAge(updatedCat.getAge());
+            catRepository.save(existingCat);
+        } else {
+            throw new RuntimeException("Cat not found");
         }
     }
 

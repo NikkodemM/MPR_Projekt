@@ -18,7 +18,8 @@ public class Cat {
     public Cat() {}
 
     // Konstruktor inicjalizujący, obliczający identyfikator
-    public Cat(String name, int age) {
+    public Cat(String name, int age, Long id) {
+        this.id = id;
         this.name = name;
         this.age = age;
         this.identifier = calculateIdentifier();

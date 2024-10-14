@@ -17,6 +17,11 @@ public class MyRestController {
         this.catService = catService;
     }
 
+    @GetMapping("cat/all")
+    public List<Cat> getAll() {
+        return this.catService.getCatList();
+    }
+
     @GetMapping("cat/{id}/identifier")
     public long getIdentifier(@PathVariable Long id) {
         Optional<Cat> cat = this.catService.get(id);
@@ -27,17 +32,17 @@ public class MyRestController {
         return this.catService.get(id);
     }
 
-    @PostMapping("cat")
+    @PostMapping("cat/add")
     public void create(@RequestBody Cat cat) {
         this.catService.createCat(cat);
     }
 
-    @DeleteMapping("cat/{name}")
-    public void delete(@PathVariable String name){
-        this.catService.deleteCat(name);
+    @DeleteMapping("cat/{id}")
+    public void delete(@PathVariable Long id){
+        this.catService.deleteCat(id);
     }
 
-    @PutMapping("cat/{id}")
+    @PutMapping("cat/update/{id}")
     public void update(@PathVariable Long id, @RequestBody Cat cat){
         this.catService.updateCat(id, cat);
     }
