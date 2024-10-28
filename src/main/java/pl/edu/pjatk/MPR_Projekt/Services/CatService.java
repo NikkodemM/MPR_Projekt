@@ -13,11 +13,12 @@ import java.util.Optional;
 public class CatService {
     private CatRepository catRepository;
     List<Cat> catList = new ArrayList<>();
+    private StringUtilsService stringUtilsService;
 
     @Autowired
-    public CatService(CatRepository repository) {
+    public CatService(CatRepository repository, StringUtilsService stringUtilsService) {
         this.catRepository = repository;
-
+        this.stringUtilsService = stringUtilsService;
         catRepository.save(new Cat("Frank", 2, 1L));
         catRepository.save(new Cat("Leon", 3,2L));
         catRepository.save(new Cat("Michael", 4, 3L));
@@ -28,15 +29,23 @@ public class CatService {
     }
 
     public List<Cat> getCatList() {
-        return (List<Cat>) catRepository.findAll();
+        List<Cat> cats = (List<Cat>) catRepository.findAll();
+        // Przetworzenie nazw przy pobieraniu z bazy (GET)
+        cats.forEach(cat -> cat.setName(stringUtilsService.toLowerCase(cat.getName())));
+        return cats;
     }
 
     public void createCat(Cat cat) {
+        // Przetworzenie nazw przy zapisie do bazy (POST)
+        cat.setName(stringUtilsService.toUpperCase(cat.getName()));
         catRepository.save(cat);
     }
 
     public Optional<Cat> getCatById(Long id) {
-        return this.catRepository.findById(id);
+        Optional<Cat> cat = this.catRepository.findById(id);
+        // Przetworzenie nazwy przy pobieraniu z bazy (GET)
+        cat.ifPresent(c -> c.setName(stringUtilsService.toLowerCase(c.getName())));
+        return cat;
     }
 
     public void deleteCat(Long id) {
@@ -47,7 +56,7 @@ public class CatService {
         Optional<Cat> cat = getCatById(id);
         if (cat.isPresent()) {
             Cat existingCat = cat.get();
-            existingCat.setName(updatedCat.getName());
+            existingCat.setName(stringUtilsService.toUpperCase(updatedCat.getName())); // przetworzenie przy zapisie (POST)
             existingCat.setAge(updatedCat.getAge());
             catRepository.save(existingCat);
         } else {
@@ -56,6 +65,8 @@ public class CatService {
     }
 
     public Optional<Cat> get(Long id) {
-        return this.catRepository.findById(id);
+        Optional<Cat> cat = this.catRepository.findById(id);
+        cat.ifPresent(c -> c.setName(stringUtilsService.toLowerCase(c.getName())));
+        return cat;
     }
 }
