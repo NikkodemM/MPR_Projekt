@@ -12,7 +12,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class CapybaraServiceTest {
+public class CatServiceTest {
     private CatService service;
     private StringUtilsService stringUtilsService;
     private CatRepository repository;
