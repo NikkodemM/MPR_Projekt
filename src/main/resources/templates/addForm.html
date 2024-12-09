@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>KotkowyFormularz</title>
+</head>
+<body>
+<h1>All my cats:</h1>
+<form action="#" th:action="@{/addForm}" th:object="${cat}" method="post">
+  <input type="text" placeholder="name" th:field="${cat.name}">
+  <input type="text" placeholder="age" th:field="${cat.age}">
+  <input type="submit" value="submit">
+</form>
+
+</body>
+</html>
